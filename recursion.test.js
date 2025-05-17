@@ -9,7 +9,13 @@ Deno.test("Recursion", async (t) => {
       // Otherwise, return the sum of the previous two Fibonacci numbers
 
       const fibonacci = (n) => {
-        throw new Error("Not implemented");
+        if (n == 0) {
+          return 0;
+        } else if (n == 1) {
+          return 1;
+        } else {
+          return fibonacci(n - 1) + fibonacci(n - 2);
+        }
       };
 
       const generalResult = fibonacci(5);
@@ -33,15 +39,19 @@ Deno.test("Recursion", async (t) => {
       // When all the characters are checked, return the result
 
       const reverseCapitalize = (str) => {
+
         const loop = (str, acc) => {
           if (str.length === 0) {
             return acc;
           }
           const [first, ...rest] = str;
 
-          fail(
-            "You need to implement the logic to reverse the capitalization",
-          );
+          const newAccumulator = acc +
+            (first === first.toLowerCase()
+              ? first.toUpperCase()
+              : first.toLowerCase());
+
+          return loop(rest, newAccumulator);
         };
 
         return loop(str, "");
@@ -62,10 +72,19 @@ Deno.test("Recursion", async (t) => {
       //  and compare it with the rest of the elements
       // Once the current max is smaller than the next element, replace it with the latter
       // When all the elements are checked, return the maximum value
-
+      
       const max = (numbers) => {
-        throw new Error("Not implemented");
-      };
+        if(numbers.length === 0){
+          return -Infinity
+        }
+        const loop = (numbers, Maximum) =>{
+        if(numbers.length === 0){
+          return Maximum
+        }
+        const [first, ...rest] = numbers
+        if 
+        
+      }};
 
       const maxOfEmptyList = max([]);
       const maxOfSingletonList = max([2]);
