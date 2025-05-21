@@ -39,7 +39,6 @@ Deno.test("Recursion", async (t) => {
       // When all the characters are checked, return the result
 
       const reverseCapitalize = (str) => {
-
         const loop = (str, acc) => {
           if (str.length === 0) {
             return acc;
@@ -72,19 +71,29 @@ Deno.test("Recursion", async (t) => {
       //  and compare it with the rest of the elements
       // Once the current max is smaller than the next element, replace it with the latter
       // When all the elements are checked, return the maximum value
-      
+
       const max = (numbers) => {
-        if(numbers.length === 0){
-          return -Infinity
+        if (numbers.length === 0) {
+          return -Infinity;
         }
-        const loop = (numbers, Maximum) =>{
-        if(numbers.length === 0){
-          return Maximum
-        }
-        const [first, ...rest] = numbers
-        if 
-        
-      }};
+
+        const [first, ...rest] = numbers;
+
+        const loop = (Num, Maximum) => {
+          if (Num.length === 0) {
+            return Maximum;
+          }
+
+          const [first, ...rest] = Num;
+          if (first > Maximum) {
+            return loop(rest, first);
+          } else {
+            return loop(rest, Maximum);
+          }
+        };
+
+        return loop(rest, first);
+      };
 
       const maxOfEmptyList = max([]);
       const maxOfSingletonList = max([2]);
@@ -109,14 +118,37 @@ Deno.test("Recursion", async (t) => {
       //  If it is not, add the first character to the result and move to the next character of the string
 
       const strip = (str, substr) => {
-        throw new Error("Not implemented");
+        if (str === "") {
+          return "";
+        }
+        if (substr === "") {
+          return str;
+        }
+
+        const loop = (str, substr, acc) => {
+          if(str === "")
+            return acc
+
+          const [Firststr,...Reststr] = str;
+          const [Firstsub,...Restsub] = substr;
+          
+          if(Firststr !== Firstsub){
+            return loop(Reststr,substr,acc + Firststr)
+          }
+          else{
+            return loop
+          }
+
+        };
+
+        return loop(str, substr, "");
       };
 
       const generalResult = strip("Skies are grey in Greece", "re");
       const emptyStringResult = strip("", "re");
       const emptySubstringResult = strip("Skies are grey in Greece", "");
       assertEquals(generalResult, "Skies a gy in Gece");
-      assertEquals(emptySubstringResult, "Skies a gy in Gece");
+      assertEquals(emptySubstringResult, "Skies are grey in Greece");
       assertEquals(emptyStringResult, "");
     },
   });
