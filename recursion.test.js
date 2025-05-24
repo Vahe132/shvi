@@ -1,4 +1,4 @@
-import { assertEquals, fail } from "jsr:@std/assert";
+import { assertEquals } from "jsr:@std/assert";
 
 Deno.test("Recursion", async (t) => {
   await t.step({
@@ -124,21 +124,22 @@ Deno.test("Recursion", async (t) => {
         if (substr === "") {
           return str;
         }
+        // if(str.startsWith(substr)){
 
+        // }
         const loop = (str, substr, acc) => {
-          if(str === "")
-            return acc
-
-          const [Firststr,...Reststr] = str;
-          const [Firstsub,...Restsub] = substr;
-          
-          if(Firststr !== Firstsub){
-            return loop(Reststr,substr,acc + Firststr)
-          }
-          else{
-            return loop
+          if (str.length === 0) {
+            return acc;
           }
 
+          const [Firststr, ...Reststr] = str;
+          const [Firstsub, ...Restsub] = substr;
+
+          if (Firststr !== Firstsub) {
+            return loop(Reststr, substr, acc + Firststr);
+          } else if (Firststr == Firstsub) {
+            return loop(Reststr, Firstsub, acc);
+          } 
         };
 
         return loop(str, substr, "");
@@ -162,7 +163,33 @@ Deno.test("Recursion", async (t) => {
       // Move to the next element and repeat the process
 
       const flatten = (arr) => {
-        throw new Error("Not implemented");
+        if (arr.length === 0) {
+          return [];
+        }
+
+        const [f, ...r] = arr;
+
+        if (Array.isArray(f)) {
+          return [...flatten(f), ...flatten(r)];
+        } else {
+          return [f, ...flatten(r)];
+        }
+
+        // const loop = (arrr, acc) => {
+        //   if (arrr.length === 0) {
+        //     return acc;
+        //   }
+
+        //   const [first, ...rest] = arrr;
+
+        //   if (Array.isArray(first)) {
+        //     return loop(rest, [...acc, ...loop(first, [])]);
+        //   } else {
+        //     return loop(rest, [...acc, first]);
+        //   }
+        // };
+
+        // return loop(arr, []);
       };
 
       const generalResult = flatten([1, [2, 3], [4, [5]]]);
