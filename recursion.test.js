@@ -117,32 +117,19 @@ Deno.test("Recursion", async (t) => {
       //  If it is, skip both characters
       //  If it is not, add the first character to the result and move to the next character of the string
 
-      const strip = (str, substr) => {
+      const strip = (str, substr, acc = "") => {
         if (str === "") {
-          return "";
+          return acc;
         }
         if (substr === "") {
           return str;
         }
-        // if(str.startsWith(substr)){
 
-        // }
-        const loop = (str, substr, acc) => {
-          if (str.length === 0) {
-            return acc;
-          }
-
-          const [Firststr, ...Reststr] = str;
-          const [Firstsub, ...Restsub] = substr;
-
-          if (Firststr !== Firstsub) {
-            return loop(Reststr, substr, acc + Firststr);
-          } else if (Firststr == Firstsub) {
-            return loop(Reststr, Firstsub, acc);
-          } 
-        };
-
-        return loop(str, substr, "");
+        if (str.startsWith(substr)) {
+          return strip(str.slice(substr.length), substr, acc);
+        } else {
+          return strip(str.slice(1), substr, acc + str[0]);
+        }
       };
 
       const generalResult = strip("Skies are grey in Greece", "re");
