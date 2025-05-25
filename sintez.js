@@ -71,16 +71,41 @@ const typeify = (token) => {
 };
 
 const tokenize = (input) => {
-  if (input == []) {
+  const graphemes = Array.from(input);
+
+  if (input.length == 0) {
     return [];
   }
 
   const loop = (
-    progressiveScope,
+    tokens,
     [graphemeAtHand, ...restOfGraphemes],
-    tokenSoFar = "",
+    tokenAtHand = "",
   ) => {
-    throw new Error("Not implemented");
+    if (restOfGraphemes.length === 0) {
+      if (tokenAtHand.length !== 0) {
+        if (isNaN(Number(tokenAtHand))) {
+          return tokens.push(atom(tokenAtHand));
+        } else {
+          return tokens.push(Number(tokenAtHand))
+        }
+      } else {
+        return tokens;
+      }
+    }
+
+    if (graphemeAtHand !== " ") {
+      return loop(tokens, restOfGraphemes, tokenAtHand+graphemeAtHand);
+    }
+
+    if (graphemeAtHand == " ") {
+      if (isNaN(Number(tokenAtHand)) == true) {
+        atom(tokenAtHand);
+        return loop(tokens + tokenAtHand, restOfGraphemes, "");
+      } else {
+        return loop(tokens + tokenAtHand, restOfGraphemes, "");
+      }
+    }
   };
 
   return loop([[]], graphemes);
