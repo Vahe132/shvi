@@ -1,4 +1,4 @@
-export { encodeWAV, evaluate, generatePCM, tokenize, typeify };
+export { encodeWAV, evaluate, generatePCM, tokenize };
 
 // sample[n]= A ⋅ sin(2 * π * f * (n / R)​)
 
@@ -66,45 +66,44 @@ async function encodeWAV(
 
 const atom = (name) => Symbol.for(name);
 
-const typeify = (token) => {
-  throw new Error("Not implemented");
-};
-
 const tokenize = (input) => {
-  const graphemes = Array.from(input);
-
   if (input.length == 0) {
     return [];
   }
 
+  const graphemes = Array.from(input);
+
   const loop = (
-    tokens,
+    [tokens],
     [graphemeAtHand, ...restOfGraphemes],
     tokenAtHand = "",
   ) => {
+    console.log({ graphemeAtHand });
     if (restOfGraphemes.length === 0) {
+      tokenAtHand += graphemeAtHand;
       if (tokenAtHand.length !== 0) {
-        if (isNaN(Number(tokenAtHand))) {
-          return tokens.push(atom(tokenAtHand));
-        } else {
-          return tokens.push(Number(tokenAtHand))
-        }
-      } else {
-        return tokens;
-      }
-    }
+        console.log({ tokenAtHand });
 
+        if (isNaN(Number(tokenAtHand))) {
+          tokens.push(atom(tokenAtHand));
+        } else {
+          tokens.push(Number(tokenAtHand));
+        }
+      }
+      return tokens;
+    }
+  
     if (graphemeAtHand !== " ") {
-      return loop(tokens, restOfGraphemes, tokenAtHand+graphemeAtHand);
+      return loop([tokens], restOfGraphemes, tokenAtHand + graphemeAtHand);
     }
 
     if (graphemeAtHand == " ") {
-      if (isNaN(Number(tokenAtHand)) == true) {
-        atom(tokenAtHand);
-        return loop(tokens + tokenAtHand, restOfGraphemes, "");
+      if (isNaN(Number(tokenAtHand))) {
+        tokens.push(atom(tokenAtHand));
       } else {
-        return loop(tokens + tokenAtHand, restOfGraphemes, "");
+        tokens.push(Number(tokenAtHand));
       }
+      return loop([tokens], restOfGraphemes, "");
     }
   };
 
